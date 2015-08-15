@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Beeweb_Wordpressproducts>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Beeweb_Wordpressproducts>
+    </modules>
+</config>

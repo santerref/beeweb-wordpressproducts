@@ -14,13 +14,18 @@ class Beeweb_Wordpressproducts_Model_Api2_Product_Rest_Guest_V1
                 $product->getId()
             );
             $stockItem = $product->getStockItem();
-            if (!$stockItem || ($stockItem instanceof Varien_Object && $stockItem->getIsInStock() == null)) {
+            if (!$stockItem
+                || ($stockItem instanceof Varien_Object
+                    && $stockItem->getIsInStock() == null)
+            ) {
                 $stockItem = Mage::getModel('cataloginventory/stock_item');
                 $stockItem->loadByProduct($product);
             }
             $productData['is_in_stock'] = $stockItem->getIsInStock();
         }
-        $productData['buy_now_url'] = Mage::getUrl('wordpress/cart/add',array('id'=>$productData['entity_id']));
+        $productData['buy_now_url'] = Mage::getUrl(
+            'wordpress/cart/add', array('id' => $productData['entity_id'])
+        );
         $product->addData($productData);
 
     }
