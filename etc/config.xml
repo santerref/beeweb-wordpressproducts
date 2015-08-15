@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Beeweb_Wordpressproducts>
+            <version>1.0.0</version>
+        </Beeweb_Wordpressproducts>
+    </modules>
+    <global>
+        <models>
+            <beeweb_wordpressproducts>
+                <class>Beeweb_Wordpressproducts_Model</class>
+            </beeweb_wordpressproducts>
+            <catalog>
+                <rewrite>
+                    <api2_product_rest_guest_v1>Beeweb_Wordpressproducts_Model_Api2_Product_Rest_Guest_V1</api2_product_rest_guest_v1>
+                </rewrite>
+            </catalog>
+        </models>
+    </global>
+    <frontend>
+        <routers>
+            <beeweb_wordpressproducts>
+                <use>standard</use>
+                <args>
+                    <module>Beeweb_Wordpressproducts</module>
+                    <frontName>wordpress</frontName>
+                </args>
+            </beeweb_wordpressproducts>
+        </routers>
+    </frontend>
+</config>
