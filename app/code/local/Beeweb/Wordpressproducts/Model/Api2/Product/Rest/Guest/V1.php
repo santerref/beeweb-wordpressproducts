@@ -26,6 +26,24 @@ class Beeweb_Wordpressproducts_Model_Api2_Product_Rest_Guest_V1
         $productData['buy_now_url'] = Mage::getUrl(
             'wordpress/cart/add', array('id' => $productData['entity_id'])
         );
+
+        $imageWidth = $this->getRequest()->getParam('image_width');
+        $imageHeight = $this->getRequest()->getParam('image_height');
+        if (!empty($imageWidth) || !empty($imageHeight)) {
+            if (empty($imageWidth)) {
+                $imageWidth = $imageHeight;
+            } elseif (empty($imageHeight)) {
+                $imageHeight = $imageWidth;
+            }
+        } else {
+            $imageWidth = 200;
+            $imageHeight = 200;
+        }
+        $productData['image_url'] = (string)Mage::helper('catalog/image')
+            ->init(
+                $product, 'image'
+            )->resize($imageWidth, $imageHeight)->keepAspectRatio(true)
+            ->keepTransparency(true);
         $product->addData($productData);
 
     }
