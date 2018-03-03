@@ -3,10 +3,16 @@
 class Beeweb_Wordpressproducts_Model_Api2_Product_Rest_Guest_V1
     extends Mage_Catalog_Model_Api2_Product_Rest_Guest_V1
 {
-    protected function _prepareProductForResponse(Mage_Catalog_Model_Product $product
-    ) {
+    protected function _prepareProductForResponse(Mage_Catalog_Model_Product $product)
+    {
         parent::_prepareProductForResponse($product);
         $productData = $product->getData();
+
+        $defaultStoreView = Mage::app()->getDefaultStoreView();
+        $storeCode = $this->getRequest()->getParam('___store', $defaultStoreView->getCode());
+
+        Mage::app()->setCurrentStore($storeCode);
+
         if ($this->getActionType() == self::ACTION_TYPE_ENTITY) {
         } else {
             $productHelper = Mage::helper('catalog/product');
@@ -23,8 +29,13 @@ class Beeweb_Wordpressproducts_Model_Api2_Product_Rest_Guest_V1
             }
             $productData['is_in_stock'] = $stockItem->getIsInStock();
         }
+
         $productData['buy_now_url'] = Mage::getUrl(
-            'wordpress/cart/add', array('id' => $productData['entity_id'])
+            'wordpress/cart/add',
+            array(
+                'id'     => $productData['entity_id'],
+                '_store' => $storeCode
+            )
         );
 
         $imageWidth = $this->getRequest()->getParam('image_width');
@@ -39,9 +50,14 @@ class Beeweb_Wordpressproducts_Model_Api2_Product_Rest_Guest_V1
             $imageWidth = 200;
             $imageHeight = 200;
         }
+
+        $resource = Mage::getSingleton('catalog/product')->getResource();
+        $imageFile = $resource->getAttributeRawValue(
+            $productData['entity_id'], 'image', Mage::app()->getStore()
+        );
         $productData['image_url'] = (string)Mage::helper('catalog/image')
             ->init(
-                $product, 'image'
+                $product, 'image', $imageFile
             )->resize($imageWidth, $imageHeight)->keepAspectRatio(true)
             ->keepTransparency(true);
         $product->addData($productData);
