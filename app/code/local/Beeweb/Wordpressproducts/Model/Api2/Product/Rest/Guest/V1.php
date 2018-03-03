@@ -11,7 +11,11 @@ class Beeweb_Wordpressproducts_Model_Api2_Product_Rest_Guest_V1
         $defaultStoreView = Mage::app()->getDefaultStoreView();
         $storeCode = $this->getRequest()->getParam('___store', $defaultStoreView->getCode());
 
-        Mage::app()->setCurrentStore($storeCode);
+        try {
+            Mage::app()->setCurrentStore($storeCode);
+        } catch (Exception $e) {
+            $storeCode = $defaultStoreView->getCode();
+        }
 
         if ($this->getActionType() == self::ACTION_TYPE_ENTITY) {
         } else {
